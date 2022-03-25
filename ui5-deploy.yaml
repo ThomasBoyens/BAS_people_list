@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.5"
+metadata:
+  name: be.ap.edu.zsd041peoplelist
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: AP_R36z
+          url: http://r36z.ucc.ovgu.de:443
+        app:
+          name: ZSD_041_PEOPLE
+          description: People list
+          package: ZSD_041_DEVELOPMENT
+          transport: TRANSPORT ERP ADVANCED 2022

@@ -9,12 +9,14 @@
         busy="{detailView>/busy}"
         busyIndicatorDelay="{detailView>/delay}">
         <semantic:titleHeading>
-            <Title
-                text="{Firstname}"
-                level="H2"/>
+                <Title
+                text="{Firstname} {Name}"
+                type="H2"/>
         </semantic:titleHeading>
         <semantic:headerContent>
-            <ObjectAttribute title="{i18n>priceTitle}"/>
+        <ObjectAttribute 
+            title="Date of birth" text="{path: 'Date_of_birth', type: 'sap.ui.model.type.Date',formatOptions: { style: 'long' }}"/>
+            <ObjectAttribute text = "{Type}" />
             <ObjectNumber />
         </semantic:headerContent>
         <semantic:content>

@@ -65,8 +65,10 @@
                     <ObjectListItem
                         type="Navigation"
                         press=".onSelectionChange"
-                        title="{Name}"
+                        title="{Name} {Firstname}"
                          />
+                    <ObjectAttribute text = "{Type}" />
+                    <ObjectListItem/>
                 </items>
             </List>
         </semantic:content>

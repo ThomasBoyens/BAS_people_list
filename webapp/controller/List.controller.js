@@ -49,11 +49,11 @@ sap.ui.define([
                 oViewModel.setProperty("/delay", iOriginalBusyDelay);
             });
 
-            this.getView().addEventDelegate({
-                onBeforeFirstShow: function () {
-                    this.getOwnerComponent().oListSelector.setBoundMasterList(oList);
-                }.bind(this)
-            });
+            // this.getView().addEventDelegate({
+            //     onBeforeFirstShow: function () {
+            //         this.getOwnerComponent().oListSelector.setBoundMasterList(oList);
+            //     }.bind(this)
+            // });
 
             this.getRouter().getRoute("list").attachPatternMatched(this._onMasterMatched, this);
             this.getRouter().attachBypassed(this.onBypassed, this);
@@ -95,7 +95,7 @@ sap.ui.define([
             var sQuery = oEvent.getParameter("query");
 
             if (sQuery) {
-                this._oListFilterState.aSearch = [new Filter("Firstname", FilterOperator.Contains, sQuery)];
+                this._oListFilterState.aSearch = [new Filter("TypeName", FilterOperator.Contains, sQuery)];
             } else {
                 this._oListFilterState.aSearch = [];
             }
@@ -237,7 +237,7 @@ sap.ui.define([
                 delay: 0,
                 title: this.getResourceBundle().getText("listTitleCount", [0]),
                 noDataText: this.getResourceBundle().getText("listListNoDataText"),
-                sortBy: "Firstname",
+                sortBy: "TypeName",
                 groupBy: "None"
             });
         },
@@ -245,6 +245,22 @@ sap.ui.define([
         _onMasterMatched:  function() {
             //Set the layout property of the FCL control to 'OneColumn'
             this.getModel("appView").setProperty("/layout", "OneColumn");
+            this._initData();
+        },
+
+        _initData() {
+            this.getModel().read('/TypePersonSet',
+            {
+                urlParameters: '$expand=toPeople',
+                success: function(oData) {
+                    const oModel = new sap.ui.model.json.JSONModel();
+                    oModel.setProperty('/typepeople', oData.results);
+                    this.getView().setModel(oModel, 'json');
+                }.bind(this),
+                error: function(oError) {
+                    console.error(oError);
+                }
+            });
         },
 
         /**
@@ -257,8 +273,10 @@ sap.ui.define([
             var bReplace = !Device.system.phone;
             // set the layout property of FCL control to show two columns
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+            this.getOwnerComponent()._type = oItem.getBindingContext("json").getModel().getProperty(`${oItem.getBindingContextPath()}`);
             this.getRouter().navTo("object", {
-                objectId : oItem.getBindingContext().getProperty("Id")
+                // objectId : oItem.getBindingContext().getProperty("TypeName")
+                objectId : oItem.getBindingContext("json").getModel().getProperty(`${oItem.getBindingContextPath()}/TypeName`)
             }, bReplace);
         },
 
